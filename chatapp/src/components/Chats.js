@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import Navbar from './Navbar';
 import styles from './Chats.module.css';
-import { useNavigate } from 'react-router';
+import { useHistory } from 'react-router';
 import { auth } from '../firebase';
 import {ChatEngine} from 'react-chat-engine';
 import AuthContext from '../contexts/AuthContextProvider'
@@ -11,10 +11,10 @@ const Chats = () => {
 
     const [loading,setLoading] =useState(true);
     const user = useContext(AuthContext)
-    const navigate =useNavigate();
+    const history =useHistory();
 
     useEffect (() => {
-        if (!user) {navigate ("/"); 
+        if (!user) {history.push("/"); 
         return; }
         axios.get ("https://api.chatengine.io/users/me", {
             headers :{
@@ -34,14 +34,14 @@ const Chats = () => {
             .then (avatar => { formData.append("avatar",avatar,avatar.name);
             axios.get ("https://api.chatengine.io/users/",formData, {
                 headers : {
-                    "private-key" :"96add401-fb9d-4ebc-af25-e62e3db0c0dc"
+                    "private-key" :"0e6cadda-6327-4a08-831b-6454a45ff1d7"
                 }
             })
             .then(() => {setLoading(false)})
             .catch (error => console.log(error))
         })
     })
-    },[user,navigate])
+    },[user,history])
 
     const getFile = async (url) =>{
         const response = await fetch(url);
@@ -51,7 +51,7 @@ const Chats = () => {
 
     const LogoutHandler = async() => {
         await auth.signOut();
-        navigate("/")
+        history.push("/")
     }
 
     if (!user || loading) return "Loading..."
@@ -59,12 +59,11 @@ const Chats = () => {
     return (
         <div className={ styles.container}>
            <Navbar logoutHandler={LogoutHandler}/> 
-          
            <ChatEngine 
            height = "calc(100vh-50px)"
-           projectID = " 0547a121-1a3b-451d-839b-d7e4109d8bff"
-           userName ={user.email}
-           useSecret ={user.uid}
+           projectID = " 28997d75-840e-4d2b-bf84-ad635f0644c8"
+           userName ="."
+           useSecret ="."
             />
         </div>
     );
